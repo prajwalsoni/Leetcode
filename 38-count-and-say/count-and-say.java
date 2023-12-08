@@ -1,41 +1,41 @@
 class Solution {
     public String countAndSay(int n) {
-        
-        // Initialize the first term of the sequence as "1"
-        String val = "1";
-        // Loop to generate the n-th term of the sequence
-        for(int i=0; i<n-1; i++) {
-            
-            // Initialize the first character of the current term
-            char ch = val.charAt(0);
-
-             // StringBuilder to build the next term
-            StringBuilder sb = new StringBuilder();
-
-            // Counter for the counting of occurrences of the current character
-            int count = 1;
-
-            // Loop through the characters of the current term
-            for(int j=1; j<val.length(); j++) {
-                
-                //If the currnet character is different from ch, it mean we have to update the sb.
-                if(ch != val.charAt(j)) {
-                    // So we update the count
-                    sb.append(count);
-                    // update the number
-                    sb.append(ch);
-                    // Set the count to 0 again.
-                    count = 0;
-                    //Now the add the character to ch which is not equal to previous
-                    ch = val.charAt(j);
-                }
+        if(n==1)
+        {
+            return "1";
+        }
+        if(n==2)
+        {
+            return "11";
+        }
+        StringBuilder nm=new StringBuilder();
+        nm.append("11");
+        for(int i=3;i<=n;i++)
+        {
+            StringBuilder kk=new StringBuilder();
+            task(nm.toString(),kk);
+            nm.setLength(0);
+            nm.append(kk);
+        }
+        return nm.toString();
+    }
+    public void task(String s, StringBuilder nm)
+    {
+        int count=1;
+        for(int i=0;i<s.length()-1;i++)
+        {
+            if(s.charAt(i) == s.charAt(i+1))
+            {
                 count++;
             }
-            // again do the same thing after coming out of the loop.
-            sb.append(count);
-            sb.append(ch);
-            val = sb.toString();
+            else
+            {
+                nm.append(count);
+                nm.append(s.charAt(i));
+                count=1;
+            }
         }
-        return val;
+        nm.append(count);
+        nm.append(s.charAt(s.length()-1));
     }
 }
