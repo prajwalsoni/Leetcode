@@ -1,34 +1,45 @@
 class Solution {
-    public void nextPermutation(int[] a) {
-        int ind = -1;
-        for(int i = a.length-2;i>=0;i--){
-            if(a[i]<a[i+1]){
-                ind = i;
+    public void nextPermutation(int[] nums) {
+        int ind1=-1;
+        int ind2=-1;
+        // step 1 find breaking point 
+        for(int i=nums.length-2;i>=0;i--){
+            if(nums[i]<nums[i+1]){
+                ind1=i;
                 break;
             }
         }
-        if(ind==-1){
-            arev(a,0,a.length-1);
-            return;
+        // if there is no breaking  point 
+        if(ind1==-1){
+            reverse(nums,0);
         }
-        for(int i = a.length-1;i>=0;i--){
-            if(a[i]>a[ind]){
-                int temp = a[i];
-                a[i]=a[ind];
-                a[ind]=temp;
-                break;
+        
+        else{
+            // step 2 find next greater element and swap with ind2
+            for(int i=nums.length-1;i>=0;i--){
+                if(nums[i]>nums[ind1]){
+                    ind2=i;
+                    break;
+                }
             }
-        }
-        arev(a,ind+1,a.length-1);
 
+            swap(nums,ind1,ind2);
+            // step 3 reverse the rest right half
+            reverse(nums,ind1+1);
+        }
     }
-        static void arev(int[] a,int low,int high){
-        while(low<high){
-            int temp = a[low];
-            a[low]=a[high];
-            a[high]=temp;
-            low++;
-            high--;
+    void swap(int[] nums,int i,int j){
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+    void reverse(int[] nums,int start){
+        int i=start;
+        int j=nums.length-1;
+        while(i<j){
+            swap(nums,i,j);
+            i++;
+            j--;
         }
     }
 }
