@@ -1,32 +1,30 @@
 class Solution {
+    // Function to swap elements in the array
+    private void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    
     public int firstMissingPositive(int[] nums) {
-        int len = nums.length, curr = 0;
-        while(curr<len){
-            int exp = curr +1; //Change zero indexing to one indexing
-            if(nums[curr]==exp||nums[curr]<1||nums[curr]>len)//These numbers do not have a place in the array - Move forward
-                curr +=1;
-            else{
-                int before = nums[curr];
-                swap(nums,curr);
-                int after = nums[curr];
-                if(before==after) //Swap was not useful - Move forward
-                    curr+=1;
-            } 
-        }
-        int i;
-        for(i = 0; i<len; i++){
-            if(i+1 != nums[i]){
-                return i+1;
+        int n = nums.length;
+        
+        // Place each positive integer i at index i-1 if possible
+        for (int i = 0; i < n; i++) {
+            while (nums[i] > 0 && nums[i] <= n && nums[i] != nums[nums[i] - 1]) {
+                swap(nums, i, nums[i] - 1);
             }
         }
-        return i+1; //If the array is perfect just return the next number
-    }
-
- //swaps a number x in a position y with number z in position x. We assume x always lie in the array because swap is only called when we know it's valid to swap
-    private void swap(int[] nums, int pos){
-        int val = nums[nums[pos]-1];
-        nums[nums[pos] - 1] = nums[pos];
-        nums[pos] = val;
-        return;
+        
+        // Find the first missing positive integer
+        for (int i = 0; i < n; i++) {
+            if (nums[i] != i + 1) {
+                return i + 1;
+            }
+        }
+        
+        // If all positive integers from 1 to n are present, return n + 1
+        return n + 1;
     }
 }
+
