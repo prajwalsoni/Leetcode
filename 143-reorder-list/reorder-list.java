@@ -1,48 +1,40 @@
-/*class ListNode {
-    int val;
-    ListNode next;
-    ListNode() {}
-    ListNode(int val) { this.val = val; }
-    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-}*/
-
 class Solution {
-    public ListNode reverse(ListNode head) {
-        if (head == null) return null;
-        ListNode prev = null;
-        ListNode curr = head;
-        ListNode nextNode = null;
-        while (curr != null) {
-            nextNode = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = nextNode;
-        }
-        return prev;
-    }
-
-    public void merge(ListNode list1, ListNode list2) {
-        while (list2 != null) {
-            ListNode nextNode = list1.next;
-            list1.next = list2;
-            list1 = list2;
-            list2 = nextNode;
-        }
-    }
-
     public void reorderList(ListNode head) {
-        if (head == null || head.next == null) return;
+        if (head == null || head.next == null || head.next.next == null) {
+            return;
+        }
+
+        // Step 1: Find the middle of the list
         ListNode slow = head;
         ListNode fast = head;
-        ListNode prev = head;
         while (fast != null && fast.next != null) {
-            prev = slow;
-            fast = fast.next.next;
             slow = slow.next;
+            fast = fast.next.next;
         }
-        prev.next = null;
-        ListNode list1 = head;
-        ListNode list2 = reverse(slow);
-        merge(list1, list2);
+
+        // Step 2: Reverse the second half of the list
+        ListNode secondHalf = slow.next;
+        slow.next = null; // Split the list into two halves
+        ListNode prev = null;
+        while (secondHalf != null) {
+            ListNode nextNode = secondHalf.next;
+            secondHalf.next = prev;
+            prev = secondHalf;
+            secondHalf = nextNode;
+        }
+        
+        // Step 3: Merge the two halves
+        ListNode firstHalf = head;
+        secondHalf = prev;
+        while (secondHalf != null) {
+            ListNode temp1 = firstHalf.next;
+            ListNode temp2 = secondHalf.next;
+
+            firstHalf.next = secondHalf;
+            secondHalf.next = temp1;
+
+            firstHalf = temp1;
+            secondHalf = temp2;
+        }
     }
 }
