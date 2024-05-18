@@ -1,43 +1,52 @@
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
- * }
- */
 class Solution {
-    public int sizeOfList(ListNode head){
-        int count = 0;
-        ListNode pTmp = head;
-        while(pTmp != null){
-            count ++;
-            pTmp = pTmp.next;
+    // Method to merge k sorted linked lists
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) {
+            return null;
         }
-        return count;
+
+        ListNode dummy = new ListNode(0);
+        ListNode temp = dummy;
+
+        while (true) {
+            int p = -1;
+            for (int i = 0; i < lists.length; i++) {
+                if (lists[i] != null) {
+                    if (p == -1 || lists[i].val < lists[p].val) {
+                        p = i;
+                    }
+                }
+            }
+
+            if (p == -1) {
+                break;
+            }
+
+            temp.next = lists[p];
+            temp = temp.next;
+            lists[p] = lists[p].next;
+        }
+
+        return dummy.next;
     }
 
+    // Method to remove the nth node from the end of the list
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode pTmp = head;
-        ListNode pPrevious = null;
-        if(n == sizeOfList(head)){
-            pTmp = pTmp.next;
-            head.next = null;
-            head = pTmp;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode fast = dummy;
+        ListNode slow = dummy;
+
+        for (int i = 0; i <= n; i++) {
+            fast = fast.next;
         }
-        else{
-            if(sizeOfList(head) == 1)
-            return null;
-            for(int i = 1; i < sizeOfList(head) - n + 1; i++){
-                pPrevious = pTmp;
-                pTmp = pTmp.next;
-            }
-            pPrevious.next = pTmp.next;
-            pTmp.next = null;
+
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
         }
-        
-        return head;
+
+        slow.next = slow.next.next;
+        return dummy.next;
     }
 }
