@@ -1,21 +1,21 @@
-public class Solution {
+class Solution {
     public boolean hasCycle(ListNode head) {
-        if (head == null ) {
+        if (head == null) {
             return false;
         }
 
-        return detectCycle(head, head.next);
-    }
+        ListNode slow = head;
+        ListNode fast = head;
 
-    private boolean detectCycle(ListNode slow, ListNode fast) {
-        if (fast == null || fast.next == null) {
-            return false;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == fast) {
+                return true; // Cycle detected
+            }
         }
 
-        if (slow == fast) {
-            return true;
-        }
-
-        return detectCycle(slow.next, fast.next.next);
+        return false; // No cycle
     }
 }
